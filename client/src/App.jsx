@@ -1,8 +1,9 @@
-import { Outlet } from "@tanstack/react-router"
+import { Outlet } from "@tanstack/react-router";
 
-
-export const rooteLayout = ()=>{
+export const rooteLayout = () => {
   return (
-    <Outlet/>
-  )
-}
+    <div className="min-h-screen w-full overflow-x-hidden">
+      <Outlet />
+    </div>
+  );
+};

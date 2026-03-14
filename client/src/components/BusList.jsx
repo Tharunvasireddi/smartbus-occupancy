@@ -3,6 +3,22 @@ import { useNavigate } from "@tanstack/react-router";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { filterBusesByRoute, subscribeBuses } from "../api/apimethods";
 
+const clampPercentage = (value) =>
+  Math.max(0, Math.min(100, Math.round(value)));
+
+const getOccupancyPercentage = (bus) => {
+  if (typeof bus?.occupancy === "number") return clampPercentage(bus.occupancy);
+
+  const capacity = bus?.capacity ?? 0;
+  const passengers = bus?.occupied ?? bus?.passengerCount ?? 0;
+
+  if (capacity > 0) {
+    return clampPercentage((passengers / capacity) * 100);
+  }
+
+  return null;
+};
+
 export const BusList = () => {
   const navigate = useNavigate();
   const [allBuses, setAllBuses] = useState([]);
@@ -148,7 +164,9 @@ export const BusList = () => {
                 <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-emerald-400 via-sky-400 to-blue-500"
-                    style={{ width: "100%" }}
+                    style={{
+                      width: `${getOccupancyPercentage(bus) ?? 100}%`,
+                    }}
                   />
                 </div>
               </button>
